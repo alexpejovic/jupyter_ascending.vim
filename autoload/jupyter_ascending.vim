@@ -16,6 +16,7 @@ endfunction
 
 function! jupyter_ascending#sync() abort
   let file_name = expand("%:p")
+  let ipynb_file_name = substitute(file_name, "py", "ipynb", "")
 
   if match(file_name, g:jupyter_ascending_match_pattern) < 0
     return
@@ -27,7 +28,13 @@ function! jupyter_ascending#sync() abort
         \ file_name
         \ )
 
+  let jupytext_cmd_str = printf(
+        \ "jupytext --sync %s",
+        \ ipynb_file_name
+        \ )
+
   call s:execute(command_string)
+  call s:execute(jupytext_cmd_str)
 endfunction
 
 function! jupyter_ascending#execute() abort
